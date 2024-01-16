@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result-app-deploy
+  namespace: vote
+  labels:
+    name: result-app-deploy
+    app: demo-voting-app
+    owner: voting.yash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: result-app-pod
+      app: demo-voting-app
+     
+  template:
+    metadata:
+      name: result-app-pod
+      labels:
+        name: result-app-pod
+        app: demo-voting-app
+        
+    spec:
+      containers:
+        - name: result-app
+          image: devendradhoot/result:latest
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "64Mi"
+          ports:
+            - containerPort: 80

@@ -1,0 +1,54 @@
+# Default values for helm-voting-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+votingAppImage:
+  repository: devendradhoot/vote
+  tag: "latest"
+
+#imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: LoadBalancer
+  port: 80
+
+common:
+  appName: demo-voting-app
+
+workerApp:
+  deployment:
+    image: devendradhoot/worker
+    tag: "latest"
+    pullPolicy: IfNotPresent
+    replicas: 1
+    name: worker-app-deploy
+    labelsName: worker-app-pod
+    cpu: "250m"
+    memory: "64Mi"
+
+votingApp: 
+  deployment:
+    image: devendradhoot/vote
+    tag: "latest"
+    replicas: 2
+    name: voting-app-deploy
+    labelsName: voting-app-pod
+    cpu: "250m"
+    memory: "64Mi"
+    port: 80
+    imagePullSecrets: vote 
+    containerName: voting-app
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm-voting-app.fullname" . }}
+  namespace: vote
+  labels:
+    name: {{ .Values.votingApp.deployment.name }}
+    app: {{ .Values.common.appName }}
+    owner: voting.yash
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: {{ .Values.votingApp.deployment.labelsName }}
+      app: {{ .Values.common.appName }}
+   
+  template:
+    metadata:
+      name: {{ .Values.votingApp.deployment.labelsName }}
+      labels:
+        name: {{ .Values.votingApp.deployment.labelsName }}
+        app: {{ .Values.common.appName }}
+       
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.votingApp.deployment.imagePullSecrets}}
+      containers:
+      - name: {{ .Values.votingApp.deployment.containerName }}
+        image: "{{ .Values.votingAppImage.repository }}:{{ .Values.votingAppImage.tag }}"
+        resources:
+          requests:
+            cpu: "{{ .Values.votingApp.deployment.cpu }}"
+            memory: "{{ .Values.votingApp.deployment.memory }}"
+          limits:
+            cpu: "{{ .Values.votingApp.deployment.cpu }}"
+            memory: "{{ .Values.votingApp.deployment.memory }}"
+        ports:
+        - containerPort: {{ .Values.votingApp.deployment.port }}
